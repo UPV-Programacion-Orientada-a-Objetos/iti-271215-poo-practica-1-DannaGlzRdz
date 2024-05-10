@@ -29,8 +29,6 @@ public class DataBaseManager {
         if (rutaDeTrabajo == null) {
             System.out.println("No se ha establecido ninguna ruta de trabajo");
             return;
-        } else {
-            System.out.println("Se establecido una ruta de trabajo");
         }
 
         File miDirectorio = rutaDeTrabajo.toFile();
@@ -40,6 +38,7 @@ public class DataBaseManager {
             return;
         }
         String[] nombresDeArchivos = miDirectorio.list();
+
 
         if (nombresDeArchivos == null || nombresDeArchivos.length == 0) {
             System.out.println("No hay archivos en la ruta");
@@ -54,6 +53,7 @@ public class DataBaseManager {
                 System.out.println(nombreDeArchivo);
                 csvEncontrado = true;
             }
+
 
             if (!csvEncontrado) {
                 System.out.println("No se ha encontrado ningun archivo csv");

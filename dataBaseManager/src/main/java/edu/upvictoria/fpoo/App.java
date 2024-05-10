@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.IllformedLocaleException;
 
 /**
@@ -19,28 +18,33 @@ public class App
 
         DataBaseManager dbManager = new DataBaseManager();
 
-
         System.out.println("Sentencia:");
 
         String comando = "";
-        while (!comando.endsWith("exit")) {
+        while (!comando.equalsIgnoreCase("exit")) {
             comando = readLine().trim();
 
             if(comando.isEmpty()) continue;
 
-            if(comando.toLowerCase().startsWith("use")){
+            try {
+                if(comando.toLowerCase().startsWith("use") && comando.toLowerCase().endsWith(";")){
 
-                String comandoCortado = comando.substring("use".length()).trim();
-                String rutaDeTrabajo = comandoCortado.replace(";","");
-                System.out.println(rutaDeTrabajo);
-                dbManager.use(rutaDeTrabajo);
+                    String comandoCortado = comando.substring("use".length()).trim();
+                    String rutaDeTrabajo = comandoCortado.replace(";", "");
+                    dbManager.use(rutaDeTrabajo);
+                } else if(comando.toLowerCase().startsWith("show tables") && comando.toLowerCase().endsWith(";")){
 
-            }  else if (comando.toLowerCase().startsWith("show tables")) {
+                    dbManager.mostrarTablas();
 
-                dbManager.mostrarTablas();
+                } else if(comando.toLowerCase().startsWith("create tables") && comando.toLowerCase().endsWith(";")){
 
-            } else if(comando.toLowerCase().startsWith("create table")){
-                //dbManager.createTable(comando);
+                    //dbManager.createTable(comando);
+
+                } else  if(!comando.equalsIgnoreCase("exit")){
+                    throw new IllegalArgumentException("Error de sintaxis");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             }
         }
     }

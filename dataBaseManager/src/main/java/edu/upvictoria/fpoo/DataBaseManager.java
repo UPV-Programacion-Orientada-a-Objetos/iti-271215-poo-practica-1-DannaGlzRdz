@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-//import java.util.ArrayArrayList;
+
 
 public class DataBaseManager {
 
@@ -15,12 +15,13 @@ public class DataBaseManager {
 
     public void use(String path) {
 
-        this.rutaDeTrabajo = Paths.get(path);
-    }
+        File file = new File(path);
+        if (file.exists() && file.isDirectory()) {
+            this.rutaDeTrabajo = Paths.get(path);
+        } else {
+            System.out.println("La ruta ingresada no es valida");
+        }
 
-    public String getWorkingPath() {
-
-        return rutaDeTrabajo.toString();
     }
 
     public void mostrarTablas(){
@@ -38,40 +39,31 @@ public class DataBaseManager {
             System.out.println("La ruta especificada no es un directorio valido");
             return;
         }
-        String[] containingFileNames = miDirectorio.list();
+        String[] nombresDeArchivos = miDirectorio.list();
 
-        if (containingFileNames == null) {
+        if (nombresDeArchivos == null || nombresDeArchivos.length == 0) {
             System.out.println("No hay archivos en la ruta");
         }
 
-        for (String fileName : containingFileNames) {
+        boolean csvEncontrado = false;
 
-            if (fileName.endsWith(".csv")) {
+        for (String nombreDeArchivo : nombresDeArchivos) {
 
-                System.out.println(fileName);
-            } else {
+            if (nombreDeArchivo.endsWith(".csv")) {
+
+                System.out.println(nombreDeArchivo);
+                csvEncontrado = true;
+            }
+
+            if (!csvEncontrado) {
                 System.out.println("No se ha encontrado ningun archivo csv");
             }
         }
 
-        /*for (String filename : containingFileNames) {
-            if (filename.endsWith(".csv")) {
-
-                StringBuilder sb = new StringBuilder();
-                Path filePath = rutaDeTrabajo.resolve(filename);
-
-                try{
-                    BufferedReader br = Files.newBufferedReader(filePath);
-
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line).append("\n");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(sb);
-            }
-        }*/
     }
-}
+
+
+    }
+
+
+

@@ -1,11 +1,11 @@
 package edu.upvictoria.fpoo;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.IllformedLocaleException;
 
 /**
  * Hello world!
@@ -16,15 +16,9 @@ public class App
 {
     public static void main( String[] args )
     {
-        String[] palabrasReservadas = {
-                "from", "where", "group by", "having", "select", "order by", "limit"
-        };
 
         DataBaseManager dbManager = new DataBaseManager();
 
-        String[] palReservadasCreateTable = {
-
-        };
 
         System.out.println("Sentencia:");
 
@@ -36,8 +30,8 @@ public class App
 
             if(comando.toLowerCase().startsWith("use")){
 
-                String comandoC = comando.substring("use".length()).trim();
-                String rutaDeTrabajo = comandoC.replace(";","");
+                String comandoCortado = comando.substring("use".length()).trim();
+                String rutaDeTrabajo = comandoCortado.replace(";","");
                 System.out.println(rutaDeTrabajo);
                 dbManager.use(rutaDeTrabajo);
 
@@ -46,21 +40,27 @@ public class App
                 dbManager.mostrarTablas();
 
             } else if(comando.toLowerCase().startsWith("create table")){
-
+                //dbManager.createTable(comando);
             }
         }
     }
 
     public static String readLine() {
-        String line = "";
+        String linea = "";
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         try {
-            line = br.readLine();
+            linea = br.readLine();
         } catch (IOException e) {
-            System.err.println("Ha ocurrido un error al leer el entrada");
+            System.err.println("Ha ocurrido un error al leer el entrada:\n" + e.getMessage());
+        } catch (NullPointerException e) {
+            System.err.println("El BufferedReader esta es nulo:\n" + e.getMessage());
+        } catch (SecurityException e) {
+            System.err.println("Hubo una excepcion de seguridad:\n" + e.getMessage());
+        }  catch (IllformedLocaleException e) {
+            System.err.println("Hubo un argumento ilegal:\n" + e.getMessage());
         }
 
-        return line;
+        return linea;
     }
 }
